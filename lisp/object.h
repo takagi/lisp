@@ -71,6 +71,7 @@ bool is_symbol(object_t form);
 
 const char* symbol_name(object_t form);
 
+
 /*
  * String
  */

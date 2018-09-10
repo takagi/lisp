@@ -97,3 +97,25 @@ const char* symbol_name(object_t form) {
     assert(form.type == TYPE_SYMBOL);
     return form == nil ? "NIL" : form.name;
 }
+
+
+/*
+ * String
+ */
+
+object_t make_string(const char* str) {
+    auto ptr = reinterpret_cast<char *>(alloc(strlen(str) + 1));
+    assert(ptr);
+    strcpy(ptr, str);
+
+    return {TYPE_STRING, .str=ptr};
+}
+
+bool is_string(object_t form) {
+    return form.type == TYPE_STRING;
+}
+
+const char* string_str(object_t form) {
+    assert(form.type == TYPE_STRING);
+    return form.str;
+}

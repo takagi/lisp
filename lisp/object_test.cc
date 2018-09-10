@@ -69,3 +69,11 @@ TEST(SymbolTest, SymbolNameTest) {
 /*
  * String
  */
+
+TEST(ObjectTest, StringTest) {
+    {
+        object_t x = make_string("Foo");
+        EXPECT_TRUE(is_string(x));
+        EXPECT_STREQ(string_str(x), "Foo");
+    }
+}
