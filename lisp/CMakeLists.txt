@@ -1,5 +1,6 @@
 install(FILES
     assert.h
+    error.h
     memory.h
     object.h
     symbol.h
