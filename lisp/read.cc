@@ -55,14 +55,14 @@ reader_macro_result_t read_string(const char** pcode, char chr) {
             }
 
             *buf++ = y;
-            if (buf - read_buf == 256) {
+            if (buf - read_buf == read_buf_size) {
                 error("Too long string.");
             }
             continue;
         }
 
         *buf++ = x;
-        if (buf - read_buf == 256) {
+        if (buf - read_buf == read_buf_size) {
             error("Too long string.");
         }
     }
