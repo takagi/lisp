@@ -12,6 +12,10 @@ char read_buf[read_buf_size];
 
 object_t __read(const char** pcode);
 
+bool is_invalid_character(char x) {
+    return false;
+}
+
 char read_char(const char** pcode) {
     if (**pcode == '\0') {
         return EOF;
@@ -84,6 +88,12 @@ reader_macro_result_t read_comment(const char** pcode) {
     }
 }
 
+// read_token
+
 object_t __read(const char** pcode) {
     return nil;
+}
+
+object_t read(const char* code) {
+    return __read(&code);
 }
