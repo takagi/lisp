@@ -3,6 +3,7 @@ install(FILES
     error.h
     memory.h
     object.h
+    read.h
     symbol.h
     typedef.h
     DESTINATION include/lisp
@@ -12,6 +13,7 @@ add_executable(lisp
     main.cc
     memory.cc
     object.cc
+    read.cc
     symbol.cc
     )
 target_compile_options(lisp PRIVATE -O2 -save-temps)
@@ -21,6 +23,7 @@ if(NOT DISABLE_TEST)
         object_test.cc
         memory.cc
         memory_test.cc
+        read_test.cc
         symbol.cc
         symbol_test.cc
         )

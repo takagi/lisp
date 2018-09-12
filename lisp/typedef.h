@@ -4,11 +4,14 @@
 
 #ifndef ARDUINO
 typedef unsigned char byte;
-#endif  // ARDUINO
+#endif  // not ARDUINO
 
 typedef ptrdiff_t __int;
 
 #ifndef ARDUINO
 struct __object_t;
-#endif  // ARDUINO
+struct __reader_macro_result_t;
+#endif  // not ARDUINO
+
 typedef __object_t object_t;
+typedef __reader_macro_result_t reader_macro_result_t;
