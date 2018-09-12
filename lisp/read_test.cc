@@ -68,3 +68,11 @@ TEST(ReadTest, ReadQuoteTest) {
 }
 
 // ReadListTest
+
+TEST(ReadTest, ReadRightParenTest) {
+    {
+        const char *x = ")";
+        EXPECT_DEATH(read_right_paren(&x), "Unmatched close parenthesis.");
+    }
+}
+

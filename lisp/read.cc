@@ -3,11 +3,14 @@
 #include <cstdio>
 
 #include "lisp/error.h"
+#include "lisp/symbol.h"
 
 
 constexpr int read_buf_size = 256;
 
 char read_buf[read_buf_size];
+
+object_t __read(const char** pcode);
 
 char read_char(const char** pcode) {
     if (**pcode == '\0') {
@@ -66,3 +69,10 @@ reader_macro_result_t read_quote(const char** pcode, char chr) {
 
 // read_list
 
+reader_macro_result_t read_right_paren(const char** pcode) {
+    error("Unmatched close parenthesis.");
+}
+
+object_t __read(const char** pcode) {
+    return nil;
+}
