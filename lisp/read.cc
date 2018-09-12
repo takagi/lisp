@@ -93,6 +93,9 @@ object_t read_token(const char* buf) {
     char *endp;
     int value;
 
+    if (*buf == '\0')
+        return intern("");
+
     errno = 0;
     value = strtol(buf, &endp, 10);
 

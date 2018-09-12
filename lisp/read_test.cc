@@ -95,6 +95,10 @@ TEST(ReadTest, ReadTokenTest) {
         EXPECT_EQ(read_token(x), intern("FOO"));
     }
     {
+        const char *x = "123F";
+        EXPECT_EQ(read_token(x), intern("123F"));
+    }
+    {
         const char *x = "";
         EXPECT_EQ(read_token(x), intern(""));
     }
