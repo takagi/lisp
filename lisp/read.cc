@@ -1,5 +1,6 @@
 #include "lisp/read.h"
 
+#include <cerrno>
 #include <cstdio>
 
 #include "lisp/error.h"
@@ -88,7 +89,21 @@ reader_macro_result_t read_comment(const char** pcode) {
     }
 }
 
-// read_token
+object_t read_token(const char* buf) {
+    char *endp;
+    int value;
+
+    errno = 0;
+    value = strtol(buf, &endp, 10);
+
+    if (*endp != '\0')
+        return intern(buf);
+
+    if (errno)
+        error("Number range error.");
+
+    return make_int(value);
+}
 
 object_t __read(const char** pcode) {
     return nil;

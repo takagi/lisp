@@ -89,4 +89,17 @@ TEST(ReadTest, ReadCommentTest) {
     }
 }
 
-// ReadTokenTest
+TEST(ReadTest, ReadTokenTest) {
+    {
+        const char *x = "FOO";
+        EXPECT_EQ(read_token(x), intern("FOO"));
+    }
+    {
+        const char *x = "";
+        EXPECT_EQ(read_token(x), intern(""));
+    }
+    {
+        const char *x = "42";
+        EXPECT_EQ(read_token(x), make_int(42));
+    }
+}
