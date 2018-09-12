@@ -18,7 +18,6 @@ target_compile_options(lisp PRIVATE -O2 -save-temps)
 
 if(NOT DISABLE_TEST)
     set(srcs
-        object.cc
         object_test.cc
         memory.cc
         memory_test.cc

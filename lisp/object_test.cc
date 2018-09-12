@@ -1,4 +1,4 @@
-#include "lisp/object.h"
+#include "lisp/object.cc"
 
 #include <gtest/gtest.h>
 

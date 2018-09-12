@@ -3,11 +3,27 @@
 #include <cstring>
 
 #include "lisp/assert.h"
+#include "lisp/error.h"
 #include "lisp/memory.h"
 
 
 bool operator==(object_t a, object_t b) {
-    return memcmp(&a, &b, sizeof(object_t)) == 0;
+    if (a.type != b.type) {
+        return false;
+    }
+
+    switch(a.type) {
+    case TYPE_INT:
+        return a.value == b.value;
+    case TYPE_CONS:
+        return a.ptr == b.ptr;
+    case TYPE_SYMBOL:
+        return a.name == b.name;
+    case TYPE_STRING:
+        return strcmp(a.str, b.str) == 0;
+    default:
+        assert(false);
+    }
 }
 
 bool operator!=(object_t a, object_t b) {
@@ -39,8 +55,10 @@ bool is_int(object_t form) {
 }
 
 __int int_value(object_t form) {
-    assert(form.type == TYPE_INT);
-    return form.value;
+    if (form.type == TYPE_INT)
+        return form.value;
+    else
+        error("Invalid type.");
 }
 
 
@@ -63,17 +81,21 @@ bool is_cons(object_t form) {
 }
 
 object_t car(object_t form) {
-    assert(form.type == TYPE_CONS || form == nil);
-    return form.type == TYPE_CONS
-        ? *reinterpret_cast<object_t *>(form.ptr)
-        : nil;
+    if (form.type == TYPE_CONS)
+        return *reinterpret_cast<object_t *>(form.ptr);
+    else if (form == nil)
+        return nil;
+    else
+        error("Not of type LIST.");
 }
 
 object_t cdr(object_t form) {
-    assert(form.type == TYPE_CONS || form == nil);
-    return form.type == TYPE_CONS
-        ? *reinterpret_cast<object_t *>(form.ptr + sizeof(object_t))
-        : nil;
+    if (form.type == TYPE_CONS)
+        return *reinterpret_cast<object_t *>(form.ptr + sizeof(object_t));
+    else if (form == nil)
+        return nil;
+    else
+        error("Not of type LIST.");
 }
 
 
@@ -94,8 +116,10 @@ bool is_symbol(object_t form) {
 }
 
 const char* symbol_name(object_t form) {
-    assert(form.type == TYPE_SYMBOL);
-    return form == nil ? "NIL" : form.name;
+    if (form.type == TYPE_SYMBOL)
+        return form == nil ? "NIL" : form.name;
+    else
+        error("Invalid type.");
 }
 
 
@@ -116,6 +140,8 @@ bool is_string(object_t form) {
 }
 
 const char* string_str(object_t form) {
-    assert(form.type == TYPE_STRING);
-    return form.str;
+    if (form.type == TYPE_STRING)
+        return form.str;
+    else
+        error("Invalid type.");
 }
