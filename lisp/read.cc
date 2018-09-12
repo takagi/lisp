@@ -73,6 +73,17 @@ reader_macro_result_t read_right_paren(const char** pcode) {
     error("Unmatched close parenthesis.");
 }
 
+reader_macro_result_t read_comment(const char** pcode) {
+    char x;
+
+    while (true) {
+        x = read_char(pcode);
+        if (x == EOF || x == '\n') {
+            return {false, nil};
+        }
+    }
+}
+
 object_t __read(const char** pcode) {
     return nil;
 }

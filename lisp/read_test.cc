@@ -76,3 +76,15 @@ TEST(ReadTest, ReadRightParenTest) {
     }
 }
 
+TEST(ReadTest, ReadCommentTest) {
+    {
+        const char *x = "foo";  // ';' is already consumed
+        EXPECT_EQ(read_comment(&x), ((reader_macro_result_t){false, nil}));
+    }
+    {
+        const char *x = "foo";  // ';' is already consumed
+        auto y = x;
+        read_comment(&x);
+        EXPECT_EQ(x - y, 3);
+    }
+}
