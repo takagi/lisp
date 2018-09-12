@@ -2,9 +2,9 @@
 
 #include "lisp/assert.h"
 
-const int MEMORY_SIZE = 32768;
+constexpr int memory_size = 32768;
 
-byte memory[MEMORY_SIZE];
+byte memory[memory_size];
 
 byte* alloc(size_t size) {
     static byte *ptr = memory;
@@ -15,7 +15,7 @@ byte* alloc(size_t size) {
     size = ((size - 1) / 4 + 1) * 4;
     assert(size % 4 == 0);
 
-    if (ptr - memory + size >= MEMORY_SIZE) {
+    if (ptr - memory + size >= memory_size) {
         // println("Memory exhausted.");
         return 0;
     }
