@@ -58,12 +58,16 @@ TEST(ReadTest, ReadStringTest) {
     }
 }
 
-TEST(ReadTest, DISABLED_ReadQuoteTest) {
+TEST(ReadTest, ReadQuoteTest) {
     {
         const char *x = "foo";  // ''' is already consumed
+        reader_macro_result_t y = read_quote(&x, '\'');
         reader_macro_result_t e = {true, make_cons(intern("QUOTE"),
                                            make_cons(intern("FOO"), nil))};
-        EXPECT_EQ(read_quote(&x, '\''), e);
+        EXPECT_EQ(y.has_value, e.has_value);
+        EXPECT_EQ(car(y.value), car(e.value));
+        EXPECT_EQ(car(cdr(y.value)), car(cdr(e.value)));
+        EXPECT_EQ(car(cdr(cdr(y.value))), car(cdr(cdr(e.value))));
     }
 }
 
