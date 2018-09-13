@@ -2,7 +2,10 @@
 
 #include <cerrno>
 #include <cstdio>
+#include <cstring>
+#include <cctype>
 
+#include "lisp/assert.h"
 #include "lisp/error.h"
 #include "lisp/symbol.h"
 
@@ -109,7 +112,155 @@ object_t read_token(const char* buf) {
 }
 
 object_t __read(const char** pcode) {
-    return nil;
+    char x, y, z;
+    char *buf = read_buf;
+    reader_macro_result_t reader_macro_result;
+
+    memset(read_buf, 0, read_buf_size);
+
+step1:
+    x = read_char(pcode);
+    if (x == EOF)
+        error("End of file.");
+
+step2:
+    if (is_invalid_character(x))
+        error("Invalid character.");
+
+step3:
+    if (x == ' ' || x == '\t' || x == '\n' || x == '\r')
+        goto step1;
+
+step4:
+    if (x == '"') {
+        reader_macro_result = read_string(pcode, '"');
+        assert(reader_macro_result.has_value);
+        return reader_macro_result.value;
+    }
+
+    if (x == '#')
+        error("Reader macro character \"#\" is not supported.");
+
+    if (x == '\'') {
+        reader_macro_result = read_quote(pcode, '\'');
+        assert(reader_macro_result.has_value);
+        return reader_macro_result.value;
+    }
+
+    /*
+    if (x == '(') {
+        reader_macro_result = read_list(pcode, '(');
+        assert(reader_macro_result.has_value);
+        return reader_macro_result.value;
+    }
+    */
+
+    if (x == ')') {
+        read_right_paren(pcode);  // no return
+        assert(false);
+    }
+
+    if (x == ',')
+        error("Reader macro character \",\" is not supported.");
+
+    if (x == ';') {
+        reader_macro_result = read_comment(pcode);
+        assert(!reader_macro_result.has_value);
+        goto step1;
+    }
+
+    if (x == '`')
+        error("Reader macro character \"`\" is not supported.");
+
+step5:
+    if (x == '\\') {
+        y = read_char(pcode);
+        if (y == EOF)
+            error("End of file.");
+
+        *buf++ = y;
+        if (buf - read_buf == read_buf_size)
+            error("Too long token.");
+
+        goto step8;
+    }
+
+step6:
+    if (x == '|')
+        goto step9;
+
+step7:
+    *buf++ = toupper(x);
+    if (buf - read_buf == read_buf_size)
+        error("Too long token.");
+    goto step8;
+
+step8:
+    y = read_char(pcode);
+    if (y == EOF)
+        goto step10;
+
+    if (y == '\\') {
+        z = read_char(pcode);
+        if (z == EOF)
+            error("End of file.");
+
+        *buf++ = z;
+        if (buf - read_buf == read_buf_size)
+            error("Too long token.");
+
+        goto step8;
+    }
+
+    if (y == '|')
+        goto step9;
+
+    if (is_invalid_character(y))
+        error("Invalid character.");
+
+    if (y == '"' || y == '\'' || y == '(' || y == ')' || y == ',' ||
+        y == ';' || y == '`') {
+        unread_char(pcode);
+        goto step10;
+    }
+
+    if (y == ' ' || y == '\t' || y == '\n' || y == '\r')
+        goto step10;
+
+    *buf++ = toupper(y);
+    if (buf - read_buf == read_buf_size)
+        error("Too long token.");
+    goto step8;
+
+step9:
+    y = read_char(pcode);
+    if (y == EOF)
+        error("End of file.");
+
+    if (y == '\\') {
+        z = read_char(pcode);
+        if (z == EOF)
+            error("End of file");
+
+        *buf++ = z;
+        if (buf - read_buf == read_buf_size)
+            error("Too long token.");
+        goto step9;
+    }
+
+    if (y == '|')
+        goto step8;
+
+    if (is_invalid_character(y))
+        error("Invalid character.");
+
+    *buf++ = y;
+    if (buf - read_buf == read_buf_size)
+        error("Too long token.");
+    goto step9;
+
+step10:
+    return read_token(read_buf);
 }
 
 object_t read(const char* code) {
