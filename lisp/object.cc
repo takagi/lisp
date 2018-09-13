@@ -98,6 +98,18 @@ object_t cdr(object_t form) {
         error("Not of type LIST.");
 }
 
+object_t rplaca(object_t cons, object_t obj) {
+    assert(cons.type == TYPE_CONS);
+    *reinterpret_cast<object_t *>(cons.ptr) = obj;
+    return cons;
+}
+
+object_t rplacd(object_t cons, object_t obj) {
+    assert(cons.type == TYPE_CONS);
+    *reinterpret_cast<object_t *>(cons.ptr + sizeof(object_t)) = obj;
+    return cons;
+}
+
 
 /*
  * Symbol

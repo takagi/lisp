@@ -60,6 +60,10 @@ object_t car(object_t form);
 
 object_t cdr(object_t form);
 
+object_t rplaca(object_t cons, object_t obj);
+
+object_t rplacd(object_t cons, object_t obj);
+
 
 /*
  * Symbol

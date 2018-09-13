@@ -75,7 +75,24 @@ reader_macro_result_t read_quote(const char** pcode, char chr) {
     return {true, make_cons(intern("QUOTE"), make_cons(__read(pcode), nil))};
 }
 
-// read_list
+reader_macro_result_t read_list(const char** pcode, char chr) {
+    // TODO: support the consing dot
+    char x;
+    object_t value = make_cons(nil, nil);
+    object_t tail = value;
+
+    while (true) {
+        x = read_char(pcode);
+        if (x == EOF)
+            error("End of file.");
+
+        if (x == ')')
+            return {true, cdr(value)};
+
+        unread_char(pcode);
+        tail = cdr(rplacd(tail, make_cons(__read(pcode), nil)));
+    }
+}
 
 reader_macro_result_t read_right_paren(const char** pcode) {
     error("Unmatched close parenthesis.");

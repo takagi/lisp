@@ -69,7 +69,20 @@ TEST(ReadTest, ReadQuoteTest) {
     }
 }
 
-// ReadListTest
+TEST(ReadTest, ReadListTest) {
+    {
+        const char *x = "foo bar)";  // '(' is already consumed
+        reader_macro_result_t y = read_list(&x, '(');
+        EXPECT_TRUE(y.has_value);
+        EXPECT_EQ(car(y.value), intern("FOO"));
+        EXPECT_EQ(car(cdr(y.value)), intern("BAR"));
+        EXPECT_EQ(car(cdr(cdr(y.value))), nil);
+    }
+    {
+        const char *x = "foo bar";  // '(' is already consumed
+        EXPECT_DEATH(read_list(&x, '('), "End of file.");
+    }
+}
 
 TEST(ReadTest, ReadRightParenTest) {
     {
