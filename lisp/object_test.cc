@@ -37,6 +37,10 @@ TEST(ObjectTest, ConsTest) {
         EXPECT_EQ(car(nil), nil);
         EXPECT_EQ(cdr(nil), nil);
     }
+
+    // TODO: rplaca
+
+    // TODO: rplacd
 }
 
 TEST(ObjectTest, SymbolTest) {
