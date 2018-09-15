@@ -7,7 +7,7 @@ object_t empty_lexenv();
 
 // lexenv_new_frame
 
-// lexenv_add_variable
+object_t lexenv_add_variable(object_t symbol, object_t value, object_t lenv);
 
 // lexenv_add_symbol_macro
 
