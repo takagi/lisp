@@ -5,7 +5,7 @@
 
 
 object_t empty_lexenv() {
-    return nil;
+    return cons(nil, nil);
 }
 
 object_t lexenv_add_variable(object_t symbol, object_t value, object_t lenv) {

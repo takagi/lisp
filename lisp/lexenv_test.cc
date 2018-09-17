@@ -2,12 +2,14 @@
 
 #include <gtest/gtest.h>
 
+#include "lisp/cons.h"
+#include "lisp/list.h"
 #include "lisp/symbol.h"
 
 
 TEST(LexenvTest, EmptyLexenvTest) {
     {
-        EXPECT_EQ(empty_lexenv(), nil);
+        EXPECT_TRUE(list_equal(empty_lexenv(), cons(nil, nil)));
     }
 }
 
