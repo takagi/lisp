@@ -5,7 +5,7 @@
 
 object_t empty_lexenv();
 
-// lexenv_new_frame
+object_t lexenv_new_frame(object_t lenv);
 
 object_t lexenv_add_variable(object_t symbol, object_t value, object_t lenv);
 
@@ -21,7 +21,7 @@ object_t lexenv_add_variable(object_t symbol, object_t value, object_t lenv);
 
 // lexenv_add_declaration
 
-// lexenv_find_variable
+object_t lexenv_find_variable(object_t symbol, object_t lenv);
 
 // lexenv_find_function
 
