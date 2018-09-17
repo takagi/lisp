@@ -3,6 +3,7 @@ install(FILES
     cons.h
     error.h
     lexenv.h
+    list.h
     memory.h
     object.h
     read.h
@@ -14,6 +15,7 @@ install(FILES
 add_executable(lisp
     cons.cc
     lexenv.cc
+    list.cc
     main.cc
     memory.cc
     object.cc
@@ -26,6 +28,7 @@ if(NOT DISABLE_TEST)
     set(srcs
         cons_test.cc
         lexenv_test.cc
+        list_test.cc
         memory.cc
         memory_test.cc
         object_test.cc
