@@ -2,6 +2,7 @@ install(FILES
     assert.h
     cons.h
     error.h
+    eval.h
     lexenv.h
     list.h
     memory.h
@@ -14,6 +15,7 @@ install(FILES
 
 add_executable(lisp
     cons.cc
+    eval.cc
     lexenv.cc
     list.cc
     main.cc
@@ -27,6 +29,7 @@ target_compile_options(lisp PRIVATE -O2 -save-temps)
 if(NOT DISABLE_TEST)
     set(srcs
         cons_test.cc
+        eval_test.cc
         lexenv_test.cc
         list_test.cc
         memory.cc
