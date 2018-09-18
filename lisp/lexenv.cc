@@ -32,7 +32,8 @@ object_t lexenv_add_variable(object_t symbol, object_t value, object_t lenv) {
 
 // lexenv_add_declaration
 
-object_t lexenv_find_variable(object_t symbol, object_t lenv) {
+lexenv_find_variable_result_t lexenv_find_variable(object_t symbol,
+                                                   object_t lenv) {
     object_t frame = car(lenv);
     object_t pair;
 
@@ -43,10 +44,10 @@ object_t lexenv_find_variable(object_t symbol, object_t lenv) {
         pair = car(frame);
 
         if (null(pair))
-            error("Variable not found.");
+            return {false, nil};
 
         if (symbol == car(pair))
-            return cdr(pair);
+            return {true, cdr(pair)};
 
         frame = cdr(frame);
     }
