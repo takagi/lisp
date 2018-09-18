@@ -13,6 +13,10 @@ TEST(EvalTest, EvalSymbolTest) {
     }
     {
         object_t lenv = empty_lexenv();
+        EXPECT_EQ(eval_symbol(nil, lenv), nil);
+    }
+    {
+        object_t lenv = empty_lexenv();
         EXPECT_DEATH(eval_symbol(intern("x"), lenv), "Variable not found.");
     }
 }

@@ -5,7 +5,12 @@
 
 
 object_t eval_symbol(object_t form, object_t lenv) {
-    lexenv_find_variable_result_t result = lexenv_find_variable(form, lenv);
+    lexenv_find_variable_result_t result;
+
+    if (null(form))
+        return nil;
+
+    result = lexenv_find_variable(form, lenv);
     if (result.found)
         return result.value;
     else
