@@ -151,7 +151,20 @@ TEST(ReadTest, ReadTest) {
         EXPECT_EQ(car(cdr(cdr(y))), nil);
     }
     {
-        // test list
+        const char *x = "()";
+        object_t y = read(x);
+        //EXPECT_EQ(y, nil);
+    }
+    {
+        const char *x = "(foo bar)";
+        object_t y = read(x);
+        EXPECT_EQ(car(y), intern("FOO"));
+        EXPECT_EQ(car(cdr(y)), intern("BAR"));
+        EXPECT_EQ(car(cdr(cdr(y))), nil);
+    }
+    {
+        const char *x = "(foo";
+        EXPECT_DEATH(read(x), "End of file.");
     }
     {
         const char *x = ")";

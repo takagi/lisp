@@ -164,13 +164,11 @@ step4:
         return reader_macro_result.value;
     }
 
-    /*
     if (x == '(') {
         reader_macro_result = read_list(pcode, '(');
         assert(reader_macro_result.has_value);
         return reader_macro_result.value;
     }
-    */
 
     if (x == ')') {
         read_right_paren(pcode);  // no return
