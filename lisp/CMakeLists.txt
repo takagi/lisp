@@ -7,6 +7,8 @@ install(FILES
     list.h
     memory.h
     object.h
+    prin1.h
+    printf.h
     read.h
     symbol.h
     typedef.h
@@ -21,6 +23,7 @@ add_executable(lisp
     main.cc
     memory.cc
     object.cc
+    prin1.cc
     read.cc
     symbol.cc
     )
@@ -35,6 +38,7 @@ if(NOT DISABLE_TEST)
         memory.cc
         memory_test.cc
         object_test.cc
+        prin1_test.cc
         read_test.cc
         symbol.cc
         symbol_test.cc
