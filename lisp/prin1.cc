@@ -4,35 +4,36 @@
 
 
 void prin1(object_t x) {
-    object_t y;
-
     switch(x.type) {
     case TYPE_INT:
         __printf("%td", x.value);
         return;
     case TYPE_CONS:
-        y = x;
         __printf("(");
-        prin1(car(y));
+        prin1(car(x));
+        x = cdr(x);
         while (true) {
-            y = cdr(y);
-            if (y == nil)
+            if (x == nil)
                 break;
-            else if (y.type == TYPE_CONS) {
-                __printf(" ");
-                prin1(car(y));
-                continue;
-            } else {
+
+            if (!is_cons(x)) {
                 __printf(" . ");
-                prin1(y);
+                prin1(x);
                 break;
             }
+
+            __printf(" ");
+            prin1(car(x));
+            x = cdr(x);
         }
         __printf(")");
         return;
     case TYPE_SYMBOL:
         // TODO: Fix to print symbols that contain non-constituent characters
-        __printf("%s", x.name);
+        if (x == nil)
+            __printf("()");
+        else
+            __printf("%s", x.name);
         return;
     case TYPE_STRING:
         __printf("\"%s\"", x.str);
