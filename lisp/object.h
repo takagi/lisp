@@ -9,7 +9,7 @@ enum {
     TYPE_STRING,
 };
 
-struct __object_t {
+typedef struct {
     __int type;
     union {
         // Int
@@ -21,7 +21,7 @@ struct __object_t {
         // String
         char *str;
     };
-};
+} object_t;
 
 bool operator==(object_t a, object_t b);
 

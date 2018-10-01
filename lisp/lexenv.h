@@ -21,10 +21,10 @@ object_t lexenv_add_variable(object_t symbol, object_t value, object_t lenv);
 
 // lexenv_add_declaration
 
-struct __lexenv_find_variable_result_t {
+typedef struct {
     bool found;
     object_t value;
-};
+} lexenv_find_variable_result_t;
 
 lexenv_find_variable_result_t lexenv_find_variable(object_t symbol,
                                                    object_t lenv);

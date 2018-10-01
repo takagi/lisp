@@ -67,13 +67,18 @@ __int int_value(object_t form) {
  */
 
 object_t make_cons(object_t car, object_t cdr) {
-    byte *ptr = alloc(sizeof(object_t) * 2);
+    object_t result;
+    byte *ptr;
+
+    ptr = alloc(sizeof(object_t) * 2);
     assert(ptr);
 
     *reinterpret_cast<object_t *>(ptr) = car;
     *reinterpret_cast<object_t *>(ptr + sizeof(object_t)) = cdr;
 
-    return {TYPE_CONS, .ptr=ptr};
+    result.type = TYPE_CONS;
+    result.ptr = ptr;
+    return result;
 }
 
 bool is_cons(object_t form) {
@@ -116,11 +121,16 @@ object_t rplacd(object_t cons, object_t obj) {
  */
 
 object_t make_symbol(const char* name) {
-    auto ptr = reinterpret_cast<char *>(alloc(strlen(name) + 1));
+    object_t result;
+    char *ptr;
+
+    ptr = reinterpret_cast<char *>(alloc(strlen(name) + 1));
     assert(ptr);
     strcpy(ptr, name);
 
-    return {TYPE_SYMBOL, .name=ptr};
+    result.type = TYPE_SYMBOL;
+    result.name = ptr;
+    return result;
 }
 
 bool is_symbol(object_t form) {
@@ -140,11 +150,16 @@ const char* symbol_name(object_t form) {
  */
 
 object_t make_string(const char* str) {
-    auto ptr = reinterpret_cast<char *>(alloc(strlen(str) + 1));
+    object_t result;
+    char *ptr;
+
+    ptr = reinterpret_cast<char *>(alloc(strlen(str) + 1));
     assert(ptr);
     strcpy(ptr, str);
 
-    return {TYPE_STRING, .str=ptr};
+    result.type = TYPE_STRING;
+    result.str = ptr;
+    return result;
 }
 
 bool is_string(object_t form) {

@@ -32,10 +32,10 @@ void unread_char(const char** pcode) {
     (*pcode)--;
 }
 
-struct __reader_macro_result_t {
+typedef struct {
     bool has_value;
     object_t value;
-};
+} reader_macro_result_t;
 
 reader_macro_result_t read_string(const char** pcode, char chr) {
     char x, y;

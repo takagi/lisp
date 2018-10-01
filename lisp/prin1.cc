@@ -6,7 +6,7 @@
 void prin1(object_t x) {
     switch(x.type) {
     case TYPE_INT:
-        __printf("%td", x.value);
+        __printf("%ld", static_cast<long>(x.value));
         return;
     case TYPE_CONS:
         __printf("(");
