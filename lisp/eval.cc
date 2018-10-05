@@ -3,6 +3,7 @@
 #include "lisp/assert.h"
 #include "lisp/error.h"
 #include "lisp/lexenv.h"
+#include "lisp/symbol.h"
 
 
 object_t eval_symbol(object_t form, object_t lenv) {
@@ -18,12 +19,23 @@ object_t eval_symbol(object_t form, object_t lenv) {
         error("Variable not found.");
 }
 
+object_t eval_cons(object_t form, object_t lenv) {
+    object_t name;
+
+    name = car(form);
+
+    if (name == intern("QUOTE"))
+        return car(cdr(form));
+
+    assert(false);
+}
+
 object_t __eval(object_t form, object_t lenv) {
     if (is_symbol(form))
         return eval_symbol(form, lenv);
 
     if (is_cons(form))
-        assert(false);
+        return eval_cons(form, lenv);
 
     return form;
 }
