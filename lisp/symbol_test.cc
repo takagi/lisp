@@ -1,4 +1,4 @@
-#include "lisp/symbol.h"
+#include "lisp/symbol.cc"
 
 #include <gtest/gtest.h>
 

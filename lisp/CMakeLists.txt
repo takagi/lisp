@@ -35,12 +35,10 @@ if(NOT DISABLE_TEST)
         eval_test.cc
         lexenv_test.cc
         list_test.cc
-        memory.cc
         memory_test.cc
         object_test.cc
         prin1_test.cc
         read_test.cc
-        symbol.cc
         symbol_test.cc
         )
     add_executable(lisp_test ${srcs})
