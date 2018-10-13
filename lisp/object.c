@@ -1,13 +1,12 @@
-#include "lisp/object.h"
+#include "object.h"
 
-#include <cstring>
+#include <string.h>
 
-#include "lisp/assert.h"
-#include "lisp/error.h"
-#include "lisp/memory.h"
+#include "assert.h"
+#include "error.h"
+#include "memory.h"
 
-
-bool operator==(object_t a, object_t b) {
+bool eq(object_t a, object_t b) {
     if (a.type != b.type) {
         return false;
     }
@@ -26,11 +25,6 @@ bool operator==(object_t a, object_t b) {
     }
 }
 
-bool operator!=(object_t a, object_t b) {
-    return !(a == b);
-}
-
-
 /*
  * Null
  */
@@ -38,16 +32,15 @@ bool operator!=(object_t a, object_t b) {
 object_t nil = {TYPE_SYMBOL, 0};
 
 bool null(object_t form) {
-    return form == nil;
+    return form.type == TYPE_SYMBOL && form.name == 0;
 }
-
 
 /*
  * Int
  */
 
 object_t make_int(__int value) {
-    return {TYPE_INT, value};
+    return (object_t){TYPE_INT, value};
 }
 
 bool is_int(object_t form) {
@@ -61,24 +54,20 @@ __int int_value(object_t form) {
         error("Invalid type.");
 }
 
-
 /*
  * Cons
  */
 
 object_t make_cons(object_t car, object_t cdr) {
-    object_t result;
     byte *ptr;
 
     ptr = alloc(sizeof(object_t) * 2);
     assert(ptr);
 
-    *reinterpret_cast<object_t *>(ptr) = car;
-    *reinterpret_cast<object_t *>(ptr + sizeof(object_t)) = cdr;
+    *(object_t *)ptr = car;
+    *(object_t *)(ptr + sizeof(object_t)) = cdr;
 
-    result.type = TYPE_CONS;
-    result.ptr = ptr;
-    return result;
+    return (object_t){TYPE_CONS, .ptr=ptr};
 }
 
 bool is_cons(object_t form) {
@@ -87,8 +76,8 @@ bool is_cons(object_t form) {
 
 object_t car(object_t form) {
     if (form.type == TYPE_CONS)
-        return *reinterpret_cast<object_t *>(form.ptr);
-    else if (form == nil)
+        return *(object_t *)form.ptr;
+    else if (null(form))
         return nil;
     else
         error("Not of type LIST.");
@@ -96,8 +85,8 @@ object_t car(object_t form) {
 
 object_t cdr(object_t form) {
     if (form.type == TYPE_CONS)
-        return *reinterpret_cast<object_t *>(form.ptr + sizeof(object_t));
-    else if (form == nil)
+        return *(object_t *)(form.ptr + sizeof(object_t));
+    else if (null(form))
         return nil;
     else
         error("Not of type LIST.");
@@ -105,16 +94,15 @@ object_t cdr(object_t form) {
 
 object_t rplaca(object_t cons, object_t obj) {
     assert(cons.type == TYPE_CONS);
-    *reinterpret_cast<object_t *>(cons.ptr) = obj;
+    *(object_t *)cons.ptr = obj;
     return cons;
 }
 
 object_t rplacd(object_t cons, object_t obj) {
     assert(cons.type == TYPE_CONS);
-    *reinterpret_cast<object_t *>(cons.ptr + sizeof(object_t)) = obj;
+    *(object_t *)(cons.ptr + sizeof(object_t)) = obj;
     return cons;
 }
-
 
 /*
  * Symbol
@@ -124,7 +112,7 @@ object_t make_symbol(const char* name) {
     object_t result;
     char *ptr;
 
-    ptr = reinterpret_cast<char *>(alloc(strlen(name) + 1));
+    ptr = (char *)alloc(strlen(name) + 1);
     assert(ptr);
     strcpy(ptr, name);
 
@@ -139,27 +127,23 @@ bool is_symbol(object_t form) {
 
 const char* symbol_name(object_t form) {
     if (form.type == TYPE_SYMBOL)
-        return form == nil ? "NIL" : form.name;
+        return null(form) ? "NIL" : form.name;
     else
         error("Invalid type.");
 }
-
 
 /*
  * String
  */
 
 object_t make_string(const char* str) {
-    object_t result;
     char *ptr;
 
-    ptr = reinterpret_cast<char *>(alloc(strlen(str) + 1));
+    ptr = (char *)alloc(strlen(str) + 1);
     assert(ptr);
     strcpy(ptr, str);
 
-    result.type = TYPE_STRING;
-    result.str = ptr;
-    return result;
+    return (object_t){TYPE_STRING, .str=ptr};
 }
 
 bool is_string(object_t form) {

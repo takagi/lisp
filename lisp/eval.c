@@ -1,20 +1,19 @@
-#include "lisp/eval.h"
+#include "eval.h"
 
-#include "lisp/assert.h"
-#include "lisp/error.h"
-#include "lisp/lexenv.h"
-#include "lisp/symbol.h"
-
+#include "assert.h"
+#include "error.h"
+#include "lexenv.h"
+#include "symbol.h"
 
 object_t eval_symbol(object_t form, object_t lenv) {
-    lexenv_find_variable_result_t result;
+    OPTIONAL(object_t) var;
 
     if (null(form))
         return nil;
 
-    result = lexenv_find_variable(form, lenv);
-    if (result.found)
-        return result.value;
+    var = lexenv_find_variable(form, lenv);
+    if (var.has_value)
+        return var.value;
     else
         error("Variable not found.");
 }
@@ -24,7 +23,7 @@ object_t eval_cons(object_t form, object_t lenv) {
 
     name = car(form);
 
-    if (name == intern("QUOTE"))
+    if (eq(name, intern("QUOTE")))
         return car(cdr(form));
 
     assert(false);

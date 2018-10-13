@@ -1,17 +1,16 @@
 #include <iostream>
 #include <string>
 
-#include "lisp/eval.h"
-#include "lisp/prin1.h"
-#include "lisp/read.h"
-
+#include "eval.h"
+#include "prin1.h"
+#include "read.h"
 
 void repl() {
     std::string line;
     do {
         std::cout << "> ";
         std::getline(std::cin, line);
-        prin1(eval(read(line.c_str())));
+        prin1(eval(__read(line.c_str())));
         std::cout << std::endl;
     } while (true);
 }

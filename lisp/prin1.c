@@ -1,42 +1,43 @@
-#include "lisp/prin1.h"
+#include "prin1.h"
 
-#include "lisp/printf.h"
-
+#include "serial.h"
 
 void prin1(object_t x) {
     switch(x.type) {
     case TYPE_INT:
-        __printf("%ld", static_cast<long>(x.value));
+        serial_print_long((long)x.value);
         return;
     case TYPE_CONS:
-        __printf("(");
+        serial_print_str("(");
         prin1(car(x));
         x = cdr(x);
         while (true) {
-            if (x == nil)
+            if (null(x))
                 break;
 
             if (!is_cons(x)) {
-                __printf(" . ");
+                serial_print_str(" . ");
                 prin1(x);
                 break;
             }
 
-            __printf(" ");
+            serial_print_str(" ");
             prin1(car(x));
             x = cdr(x);
         }
-        __printf(")");
+        serial_print_str(")");
         return;
     case TYPE_SYMBOL:
         // TODO: Fix to print symbols that contain non-constituent characters
-        if (x == nil)
-            __printf("()");
+        if (null(x))
+            serial_print_str("()");
         else
-            __printf("%s", x.name);
+            serial_print_str(x.name);
         return;
     case TYPE_STRING:
-        __printf("\"%s\"", x.str);
+        serial_print_str("\"");
+        serial_print_str(x.str);
+        serial_print_str("\"");
         return;
     }
 }

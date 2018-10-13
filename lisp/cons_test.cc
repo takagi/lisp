@@ -1,7 +1,6 @@
-#include "lisp/cons.cc"
+#include "cons.c"
 
 #include <gtest/gtest.h>
-
 
 TEST(ConsTest, DISABLED_ConsTest) {
 }

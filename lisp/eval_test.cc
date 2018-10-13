@@ -1,9 +1,10 @@
-#include "lisp/eval.cc"
+#include "eval.c"
 
 #include <gtest/gtest.h>
 
-#include "lisp/symbol.h"
-
+#include "lexenv.h"
+#include "symbol.h"
+#include "test_util.h"
 
 TEST(EvalTest, EvalSymbolTest) {
     {

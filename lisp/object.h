@@ -1,6 +1,11 @@
 #pragma once
 
-#include "lisp/typedef.h"
+#include "optional.h"
+#include "typedef.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum {
     TYPE_INT = 1,
@@ -23,10 +28,9 @@ typedef struct {
     };
 } object_t;
 
-bool operator==(object_t a, object_t b);
+DEFINE_OPTIONAL(object_t);
 
-bool operator!=(object_t a, object_t b);
-
+bool eq(object_t a, object_t b);
 
 /*
  * Null
@@ -35,7 +39,6 @@ bool operator!=(object_t a, object_t b);
 extern object_t nil;
 
 bool null(object_t form);
-
 
 /*
  * Int
@@ -46,7 +49,6 @@ object_t make_int(__int value);
 bool is_int(object_t form);
 
 __int int_value(object_t form);
-
 
 /*
  * Cons
@@ -64,7 +66,6 @@ object_t rplaca(object_t cons, object_t obj);
 
 object_t rplacd(object_t cons, object_t obj);
 
-
 /*
  * Symbol
  */
@@ -75,7 +76,6 @@ bool is_symbol(object_t form);
 
 const char* symbol_name(object_t form);
 
-
 /*
  * String
  */
@@ -85,3 +85,7 @@ object_t make_string(const char *str);
 bool is_string(object_t form);
 
 const char* string_str(object_t form);
+
+#ifdef __cplusplus
+}
+#endif

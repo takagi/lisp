@@ -1,7 +1,8 @@
-#include "lisp/object.cc"
+#include "object.c"
 
 #include <gtest/gtest.h>
 
+#include "test_util.h"
 
 TEST(ObjectTest, NullTest) {
     {

@@ -1,9 +1,9 @@
-#include "lisp/list.cc"
+#include "list.c"
 
 #include <gtest/gtest.h>
 
-#include "lisp/cons.h"
-
+#include "cons.h"
+#include "test_util.h"
 
 TEST(ListTest, IsListTest) {
     {
