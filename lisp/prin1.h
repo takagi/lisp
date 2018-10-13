@@ -1,6 +1,13 @@
 #pragma once
 
-#include "lisp/object.h"
+#include "object.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void prin1(object_t object);
+
+#ifdef __cplusplus
+}
+#endif

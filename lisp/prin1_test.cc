@@ -1,7 +1,6 @@
-#include "lisp/prin1.cc"
+#include "prin1.c"
 
 #include <gtest/gtest.h>
-
 
 TEST(Prin1Test, Prin1Test) {
     {

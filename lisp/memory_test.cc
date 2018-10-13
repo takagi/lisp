@@ -1,1 +1,1 @@
-#include "lisp/memory.cc"
+#include "memory.c"

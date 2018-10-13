@@ -1,9 +1,8 @@
-#include "lisp/symbol.h"
+#include "symbol.h"
 
-#include <cstring>
+#include <string.h>
 
-
-object_t __symbols = nil;
+object_t __symbols = {TYPE_SYMBOL, 0};
 
 object_t intern(const char* name) {
     object_t x = __symbols;

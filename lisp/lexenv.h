@@ -1,7 +1,11 @@
 #pragma once
 
-#include "lisp/object.h"
+#include "object.h"
+#include "optional.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 object_t empty_lexenv();
 
@@ -21,13 +25,7 @@ object_t lexenv_add_variable(object_t symbol, object_t value, object_t lenv);
 
 // lexenv_add_declaration
 
-typedef struct {
-    bool found;
-    object_t value;
-} lexenv_find_variable_result_t;
-
-lexenv_find_variable_result_t lexenv_find_variable(object_t symbol,
-                                                   object_t lenv);
+OPTIONAL(object_t) lexenv_find_variable(object_t symbol, object_t lenv);
 
 // lexenv_find_function
 
@@ -36,3 +34,7 @@ lexenv_find_variable_result_t lexenv_find_variable(object_t symbol,
 // lexenv_find_go_tag
 
 // lexenv_declarations
+
+#ifdef __cplusplus
+}
+#endif

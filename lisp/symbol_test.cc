@@ -1,7 +1,8 @@
-#include "lisp/symbol.cc"
+#include "symbol.c"
 
 #include <gtest/gtest.h>
 
+#include "test_util.h"
 
 TEST(SymbolTest, InternTest) {
     {

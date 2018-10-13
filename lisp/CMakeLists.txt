@@ -7,25 +7,27 @@ install(FILES
     list.h
     memory.h
     object.h
+    optional.h
     prin1.h
-    printf.h
     read.h
+    serial.h
     symbol.h
     typedef.h
     DESTINATION include/lisp
     )
 
 add_executable(lisp
-    cons.cc
-    eval.cc
-    lexenv.cc
-    list.cc
+    cons.c
+    eval.c
+    lexenv.c
+    list.c
     main.cc
-    memory.cc
-    object.cc
-    prin1.cc
-    read.cc
-    symbol.cc
+    memory.c
+    object.c
+    prin1.c
+    read.c
+    serial.cc
+    symbol.c
     )
 target_compile_options(lisp PRIVATE -O2 -save-temps)
 
@@ -39,7 +41,9 @@ if(NOT DISABLE_TEST)
         object_test.cc
         prin1_test.cc
         read_test.cc
+        serial_test.cc
         symbol_test.cc
+        test_util.cc
         )
     add_executable(lisp_test ${srcs})
 

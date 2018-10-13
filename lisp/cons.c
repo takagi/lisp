@@ -1,5 +1,4 @@
-#include "lisp/cons.h"
-
+#include "cons.h"
 
 object_t cons(object_t se1, object_t se2) {
     return make_cons(se1, se2);

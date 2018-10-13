@@ -1,9 +1,17 @@
 #pragma once
 
-#include <cstdlib>
+#include <stdlib.h>
 
-#include "lisp/typedef.h"
+#include "typedef.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 byte* alloc(size_t size);
 
-void free(byte *ptr);
+void __free(byte *ptr);
+
+#ifdef __cplusplus
+}
+#endif

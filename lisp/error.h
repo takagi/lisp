@@ -1,11 +1,11 @@
 #pragma once
 
-#include <cstdlib>
-#include <cstdio>
+#include <stdlib.h>
 
+#include "serial.h"
 
-#define error(__e...)         \
-    do {                      \
-        fprintf(stderr, __e); \
-        exit(-1);             \
+#define error(__e)                              \
+    do {                                        \
+        serial_println_err(__e);                \
+        exit(-1);                               \
     } while(0)

@@ -1,9 +1,8 @@
-#include "lisp/lexenv.h"
+#include "lexenv.h"
 
-#include "lisp/assert.h"
-#include "lisp/cons.h"
-#include "lisp/error.h"
-
+#include "assert.h"
+#include "cons.h"
+#include "error.h"
 
 object_t empty_lexenv() {
     return cons(nil, nil);
@@ -32,8 +31,7 @@ object_t lexenv_add_variable(object_t symbol, object_t value, object_t lenv) {
 
 // lexenv_add_declaration
 
-lexenv_find_variable_result_t lexenv_find_variable(object_t symbol,
-                                                   object_t lenv) {
+OPTIONAL(object_t) lexenv_find_variable(object_t symbol, object_t lenv) {
     object_t frame = car(lenv);
     object_t pair;
 
@@ -44,10 +42,10 @@ lexenv_find_variable_result_t lexenv_find_variable(object_t symbol,
         pair = car(frame);
 
         if (null(pair))
-            return {false, nil};
+            return (OPTIONAL(object_t)){false, nil};
 
-        if (symbol == car(pair))
-            return {true, cdr(pair)};
+        if (eq(symbol, car(pair)))
+            return (OPTIONAL(object_t)){true, cdr(pair)};
 
         frame = cdr(frame);
     }
