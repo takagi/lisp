@@ -30,7 +30,7 @@ void prin1(object_t x) {
     case TYPE_SYMBOL:
         // TODO: Fix to print symbols that contain non-constituent characters
         if (null(x))
-            serial_print_str("()");
+            serial_print_str("NIL");
         else
             serial_print_str(x.name);
         return;
