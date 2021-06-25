@@ -18,6 +18,19 @@ bool is_invalid_character(char x) {
     return false;
 }
 
+bool is_whitespace(char x) {
+    return x == ' ' || x == '\t' || x == '\n' || x == '\r';
+}
+
+bool is_terminating_character(char x) {
+    return (x == '"' || x == '\'' || x == '(' || x == ')' || x == ',' ||
+            x == ';' || x == '`');
+}
+
+bool is_delimiter(char x) {
+    return is_whitespace(x) || is_terminating_character(x);
+}
+
 char read_char(const char** pcode) {
     if (**pcode == '\0') {
         return '\0';
@@ -69,9 +82,54 @@ OPTIONAL(object_t) read_quote(const char** pcode, char chr) {
         true, make_cons(intern("QUOTE"), make_cons(__read_impl(pcode), nil))};
 }
 
+object_t read_after_dot(const char** pcode) {
+    signed char x;
+    object_t result;
+
+step1:
+    x = read_char(pcode);
+    if (x == '\0')
+        error("End of file.");
+
+step2:
+    if (is_invalid_character(x))
+        error("Invalid character.");
+
+step3:
+    if (x == ' ' || x == '\t' || x == '\n' || x == '\r')
+        goto step1;
+
+step4:
+    if (x == ')')
+        error("Nothing appears after . in list.");
+
+step5:
+    unread_char(pcode);
+    result = __read_impl(pcode);
+
+step6:
+    x = read_char(pcode);
+    if (x == '\0')
+        error("End of file.");
+
+step7:
+    if (is_invalid_character(x))
+        error("Invalid character.");
+
+step8:
+    if (x == ' ' || x == '\t' || x == '\n' || x == '\r')
+        goto step6;
+
+step9:
+    if (x == ')')
+        return result;
+
+step10:
+    error("More than one object follows . in list.");
+}
+
 OPTIONAL(object_t) read_list(const char** pcode, char chr) {
-    // TODO: support the consing dot
-    char x;
+    char x, y;
     object_t value = make_cons(nil, nil);
     object_t tail = value;
 
@@ -82,6 +140,17 @@ OPTIONAL(object_t) read_list(const char** pcode, char chr) {
 
         if (x == ')')
             return (OPTIONAL(object_t)){true, cdr(value)};
+
+        if (x == '.') {
+            if (eq(value, tail))
+                error("Nothing appears before . in list.");
+            y = read_char(pcode);
+            unread_char(pcode);
+            if (is_delimiter(y)) {
+                rplacd(tail, read_after_dot(pcode));
+                return (OPTIONAL(object_t)){true, cdr(value)};
+            }
+        }
 
         unread_char(pcode);
         tail = cdr(rplacd(tail, make_cons(__read_impl(pcode), nil)));
@@ -171,6 +240,9 @@ step4:
 
     if (x == ',')
         error("Reader macro character \",\" is not supported.");
+
+    if (x == '.')
+        error("Dot context error.");
 
     if (x == ';') {
         result = read_comment(pcode);

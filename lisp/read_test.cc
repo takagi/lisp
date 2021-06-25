@@ -75,6 +75,34 @@ TEST(ReadTest, ReadListTest) {
     }
 }
 
+TEST(ReadTest, ReadDottedListTest) {
+    {
+        const char *x = "foo . bar)";  // '(' is already consumed
+        OPTIONAL(object_t) y = read_list(&x, '(');
+        EXPECT_EQ(car(y.value), intern("FOO"));
+        EXPECT_EQ(cdr(y.value), intern("BAR"));
+    }
+    {
+        const char *x = "foo bar . baz)";  // '(' is already consumed
+        OPTIONAL(object_t) y = read_list(&x, '(');
+        EXPECT_EQ(car(y.value), intern("FOO"));
+        EXPECT_EQ(car(cdr(y.value)), intern("BAR"));
+        EXPECT_EQ(cdr(cdr(y.value)), intern("BAZ"));
+    }
+    {
+        const char *x = ". foo)";  // '(' is already consumed
+        EXPECT_DEATH(read_list(&x, '('), "Nothing appears before . in list.");
+    }
+    {
+        const char *x = "foo .)";  // '(' is already consumed
+        EXPECT_DEATH(read_list(&x, '('), "Nothing appears after . in list.");
+    }
+    {
+        const char *x = "foo . bar baz)";  // '(' is already consumed
+        EXPECT_DEATH(read_list(&x, '('), "More than one object follows . in list.");
+    }
+}
+
 TEST(ReadTest, ReadRightParenTest) {
     {
         const char *x = ")";
@@ -144,7 +172,7 @@ TEST(ReadTest, ReadTest) {
     {
         const char *x = "()";
         object_t y = __read(x);
-        //EXPECT_EQ(y, nil);
+        EXPECT_EQ(y, nil);
     }
     {
         const char *x = "(foo bar)";
@@ -164,6 +192,10 @@ TEST(ReadTest, ReadTest) {
     {
         const char *x = ",";
         EXPECT_DEATH(__read(x), "Reader macro character \",\" is not supported.");
+    }
+    {
+        const char *x = ".";
+        EXPECT_DEATH(__read(x), "Dot context error.");
     }
     {
         const char *x = ";foo";
